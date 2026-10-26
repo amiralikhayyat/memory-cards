@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#4a148c">
+<title>حافظه کارت‌ها | طراحی: سید امیرعلی خیاط‌زاده</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#1a0a2e;--card:#2d1b4e;--accent:#ffd54f;--pink:#e91e63;
+  --purple:#9c27b0;--text:#f3e5f5;--muted:#ce93d8;
+}
+body{
+  font-family:Tahoma,Arial,sans-serif;
+  background:radial-gradient(ellipse at top,#4a148c 0%,#1a0a2e 55%);
+  min-height:100vh;color:var(--text);
+  display:flex;flex-direction:column;align-items:center;
+  user-select:none;
+}
+.hidden{display:none!important}
+.screen{width:100%;max-width:440px;padding:16px;text-align:center}
+
+h1{font-size:28px;background:linear-gradient(90deg,#ffd54f,#f48fb1,#ce93d8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:8px 0}
+.title-lg{font-size:32px!important;margin:16px 0 20px!important}
+.sub{color:var(--muted);font-size:13px;line-height:1.7;margin-bottom:12px}
+.designer{color:var(--accent);font-size:16px;font-weight:bold;margin-top:36px;letter-spacing:.3px}
+
+.btn{
+  display:block;width:100%;max-width:300px;margin:8px auto;padding:13px 18px;
+  border:none;border-radius:14px;font-size:15px;font-family:inherit;
+  cursor:pointer;font-weight:bold;transition:.15s;
+}
+.btn-primary{background:linear-gradient(135deg,#e91e63,#9c27b0);color:#fff}
+.btn-lg{padding:16px 24px!important;font-size:18px!important}
+.btn-outline{background:transparent;border:2px solid #ce93d8;color:#f3e5f5}
+.btn-sm{display:inline-block;width:auto;padding:8px 14px;font-size:13px;margin:4px}
+.btn:active{transform:scale(.97)}
+
+.hero-art{
+  width:140px;height:140px;margin:20px auto 8px;position:relative;
+}
+.card-stack{
+  width:90px;height:110px;margin:0 auto;position:relative;
+}
+.card-stack .c{
+  position:absolute;width:70px;height:90px;border-radius:12px;
+  border:3px solid #ffd54f;left:50%;transform:translateX(-50%);
+  box-shadow:0 6px 16px rgba(0,0,0,.4);
+}
+.card-stack .c1{background:linear-gradient(145deg,#e91e63,#9c27b0);top:0;transform:translateX(-50%) rotate(-8deg)}
+.card-stack .c2{background:linear-gradient(145deg,#7c4dff,#536dfe);top:8px;transform:translateX(-40%) rotate(6deg)}
+.card-stack .c3{background:linear-gradient(145deg,#ffd54f,#ff8f00);top:16px;transform:translateX(-60%) rotate(-3deg);
+  display:flex;align-items:center;justify-content:center;font-size:32px}
+
+.level-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  font-size:13px;margin-bottom:6px;color:var(--muted);flex-wrap:wrap;gap:6px;
+}
+.level-bar b{color:var(--accent)}
+.record-line{font-size:12px;color:var(--muted);margin-bottom:8px}
+.record-line b{color:#81c784}
+
+.hud{
+  display:flex;justify-content:space-around;background:rgba(0,0,0,.3);
+  border-radius:12px;padding:10px;margin-bottom:12px;font-size:14px;
+}
+.hud span{color:var(--muted)}
+.hud b{color:var(--accent);font-size:16px}
+
+.board{
+  display:grid;gap:8px;margin:0 auto;max-width:400px;
+  perspective:800px;
+}
+.mem-card{
+  aspect-ratio:3/4;border-radius:12px;cursor:pointer;
+  position:relative;transform-style:preserve-3d;
+  transition:transform .35s ease;
+}
+.mem-card.flipped{transform:rotateY(180deg)}
+.mem-card.matched{transform:rotateY(180deg);pointer-events:none}
+.mem-card.matched .face-front{box-shadow:0 0 0 3px #66bb6a,0 4px 12px rgba(102,187,106,.4)}
+
+.face{
+  position:absolute;inset:0;border-radius:12px;
+  backface-visibility:hidden;display:flex;align-items:center;justify-content:center;
+  font-size:clamp(22px,7vw,36px);
+  box-shadow:0 4px 12px rgba(0,0,0,.35);
+}
+.face-back{
+  background:linear-gradient(145deg,#7c4dff,#4a148c);
+  border:2px solid rgba(255,213,79,.4);
+}
+.face-back::after{
+  content:'?';font-size:clamp(24px,8vw,40px);font-weight:bold;
+  color:rgba(255,213,79,.85);text-shadow:0 2px 6px rgba(0,0,0,.4);
+}
+.face-front{
+  background:linear-gradient(145deg,#fff8e1,#ffe082);
+  transform:rotateY(180deg);
+  border:2px solid #ff8f00;
+}
+
+.msg{
+  margin-top:12px;padding:10px;border-radius:12px;font-size:14px;min-height:20px;
+  background:rgba(156,39,176,.2);
+}
+.msg.win{background:rgba(102,187,106,.25);color:#a5d6a7;font-weight:bold}
+.msg.lose{background:rgba(239,83,80,.2);color:#ef9a9a}
+
+.stars{font-size:24px;letter-spacing:4px;margin:10px 0}
+.time-box{
+  background:rgba(0,0,0,.25);border-radius:12px;padding:12px;margin:10px 0;
+  font-size:14px;line-height:1.9;
+}
+.time-box b{color:var(--accent)}
+.time-box .new-rec{color:#66bb6a;font-weight:bold}
+
+.diff-btns{display:flex;flex-direction:column;gap:8px;margin:16px 0}
+.diff-btns .btn{margin:0 auto}
+
+.progress{
+  height:6px;background:rgba(255,255,255,.1);border-radius:4px;margin:8px 0 12px;overflow:hidden;
+}
+.progress>div{height:100%;background:linear-gradient(90deg,#ffd54f,#e91e63);border-radius:4px;transition:.3s}
+</style>
+</head>
+<body>
+
+<!-- START -->
+<div id="start" class="screen">
+  <div class="hero-art">
+    <div class="card-stack">
+      <div class="c c1"></div>
+      <div class="c c2"></div>
+      <div class="c c3">🃏</div>
+    </div>
+  </div>
+  <h1 class="title-lg">حافظه کارت‌ها</h1>
+  <button class="btn btn-primary btn-lg" onclick="show('mode')">شروع</button>
+  <button class="btn btn-outline" onclick="show('how')">راهنما</button>
+  <p class="designer">طراحی و ساخت: سید امیرعلی خیاط‌زاده</p>
+</div>
+
+<!-- HOW -->
+<div id="how" class="screen hidden">
+  <h1 style="font-size:22px;margin-top:24px">راهنما</h1>
+  <div style="background:rgba(0,0,0,.25);border-radius:14px;padding:16px;text-align:right;font-size:14px;line-height:2;margin:16px 0">
+    کارت‌ها را یکی‌یکی برگردان.<br>
+    دو کارت یکسان پیدا کن تا جفت شوند.<br>
+    همه جفت‌ها را با کمترین حرکت و زمان پیدا کن.<br>
+    هر سطح سخت‌تر = کارت‌های بیشتر.
+  </div>
+  <button class="btn btn-primary" onclick="show('start')">برگشت</button>
+</div>
+
+<!-- MODE -->
+<div id="mode" class="screen hidden">
+  <h1 style="font-size:22px;margin-top:24px">سطح سختی</h1>
+  <div class="diff-btns">
+    <button class="btn btn-primary" onclick="startLevel(0)">آسان · ۶ جفت</button>
+    <button class="btn btn-primary" onclick="startLevel(1)">متوسط · ۸ جفت</button>
+    <button class="btn btn-primary" onclick="startLevel(2)">سخت · ۱۲ جفت</button>
+    <button class="btn btn-primary" onclick="startLevel(3)">استاد · ۱۸ جفت</button>
+  </div>
+  <button class="btn btn-outline" onclick="show('start')">برگشت</button>
+</div>
+
+<!-- GAME -->
+<div id="game" class="screen hidden" style="max-width:460px">
+  <div class="level-bar">
+    <span id="level-name">آسان</span>
+    <span>رکورد: <b id="rec-display">—</b></span>
+  </div>
+  <div class="hud">
+    <div><span>زمان</span><br><b id="timer">0</b></div>
+    <div><span>حرکت</span><br><b id="moves">0</b></div>
+    <div><span>جفت</span><br><b id="pairs">0</b>/<b id="pairs-total">0</b></div>
+  </div>
+  <div class="board" id="board"></div>
+  <div class="msg" id="msg"></div>
+  <button class="btn btn-outline btn-sm" onclick="backMenu()">منو</button>
+</div>
+
+<!-- WIN -->
+<div id="win" class="screen hidden">
+  <div style="font-size:56px;margin:20px 0 8px">🎉</div>
+  <h1 style="font-size:24px">آفرین!</h1>
+  <div class="stars" id="stars">⭐⭐⭐</div>
+  <div class="time-box" id="time-box"></div>
+  <button class="btn btn-primary" onclick="show('mode')">سطح دیگر</button>
+  <button class="btn btn-outline" onclick="replay()">دوباره همین سطح</button>
+  <button class="btn btn-outline" onclick="backMenu()">منو</button>
+</div>
+
+<script>
+const EMOJIS = [
+  '🐶','🐱','🐭','🐹','🐰','🦊','🐻','🐼',
+  '🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔',
+  '🦄','🐝','🦋','🐢','🐙','🦀','🐠','🦉',
+  '🌹','🌻','🌈','⭐','🔥','💎','🎯','🎪'
+];
+
+const LEVELS = [
+  {name:'آسان', pairs:6, cols:4},
+  {name:'متوسط', pairs:8, cols:4},
+  {name:'سخت', pairs:12, cols:4},
+  {name:'استاد', pairs:18, cols:6},
+];
+
+let levelIdx=0, cards=[], flipped=[], lock=false, moves=0, matched=0;
+let startTime=0, timerId=null, elapsed=0;
+const REC_KEY='memoryCardsRec_v1';
+
+function show(id){
+  ['start','how','mode','game','win'].forEach(s=>{
+    document.getElementById(s).classList.toggle('hidden', s!==id);
+  });
+  if(id!=='game') stopTimer();
+}
+function backMenu(){ stopTimer(); show('start'); }
+
+function loadRecords(){ try{return JSON.parse(localStorage.getItem(REC_KEY)||'{}')}catch(e){return{}} }
+function getRec(lv){ const r=loadRecords(); return r[lv]!=null?r[lv]:null; }
+function saveRec(lv, sec, mov){
+  const r=loadRecords();
+  const cur=r[lv];
+  // better = less time; if same time, less moves
+  if(!cur || sec<cur.t || (sec===cur.t && mov<cur.m)){
+    r[lv]={t:sec,m:mov};
+    localStorage.setItem(REC_KEY, JSON.stringify(r));
+    return true;
+  }
+  return false;
+}
+function fmt(s){
+  s=Math.max(0,Math.floor(s));
+  const m=Math.floor(s/60), ss=s%60;
+  return m>0 ? m+':'+String(ss).padStart(2,'0') : ss+' ثانیه';
+}
+
+function startLevel(idx){
+  levelIdx=idx;
+  const L=LEVELS[idx];
+  moves=0; matched=0; flipped=[]; lock=false; elapsed=0;
+  document.getElementById('level-name').textContent=L.name;
+  document.getElementById('moves').textContent='0';
+  document.getElementById('pairs').textContent='0';
+  document.getElementById('pairs-total').textContent=L.pairs;
+  document.getElementById('msg').textContent='';
+  document.getElementById('msg').className='msg';
+  const rec=getRec(idx);
+  document.getElementById('rec-display').textContent=rec?fmt(rec.t)+' / '+rec.m+' حرکت':'—';
+
+  // build deck
+  const icons=EMOJIS.slice(0,L.pairs);
+  let deck=[...icons,...icons];
+  // shuffle
+  for(let i=deck.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [deck[i],deck[j]]=[deck[j],deck[i]];
+  }
+  cards=deck.map((icon,i)=>({id:i, icon, matched:false}));
+
+  const board=document.getElementById('board');
+  board.style.gridTemplateColumns=`repeat(${L.cols}, 1fr)`;
+  board.innerHTML='';
+  cards.forEach((c,i)=>{
+    const el=document.createElement('div');
+    el.className='mem-card';
+    el.dataset.idx=i;
+    el.innerHTML=`<div class="face face-back"></div><div class="face face-front">${c.icon}</div>`;
+    el.onclick=()=>flip(i);
+    board.appendChild(el);
+  });
+
+  show('game');
+  startTimer();
+  try{ensureAud()}catch(e){}
+}
+
+function replay(){ startLevel(levelIdx); }
+
+function flip(i){
+  if(lock) return;
+  const c=cards[i];
+  if(c.matched) return;
+  if(flipped.includes(i)) return;
+  if(flipped.length>=2) return;
+
+  playFlip();
+  flipped.push(i);
+  document.querySelectorAll('.mem-card')[i].classList.add('flipped');
+
+  if(flipped.length===2){
+    moves++;
+    document.getElementById('moves').textContent=moves;
+    lock=true;
+    const a=cards[flipped[0]], b=cards[flipped[1]];
+    if(a.icon===b.icon){
+      // match
+      setTimeout(()=>{
+        a.matched=true; b.matched=true;
+        document.querySelectorAll('.mem-card')[flipped[0]].classList.add('matched');
+        document.querySelectorAll('.mem-card')[flipped[1]].classList.add('matched');
+        matched++;
+        document.getElementById('pairs').textContent=matched;
+        playMatch();
+        flipped=[]; lock=false;
+        if(matched===LEVELS[levelIdx].pairs) winGame();
+      }, 350);
+    } else {
+      setTimeout(()=>{
+        document.querySelectorAll('.mem-card')[flipped[0]].classList.remove('flipped');
+        document.querySelectorAll('.mem-card')[flipped[1]].classList.remove('flipped');
+        playMiss();
+        flipped=[]; lock=false;
+      }, 700);
+    }
+  }
+}
+
+function winGame(){
+  stopTimer();
+  playWin();
+  const L=LEVELS[levelIdx];
+  // stars: based on moves efficiency
+  const perfect=L.pairs; // minimum moves = pairs
+  let stars=3;
+  if(moves > perfect*2.2) stars=1;
+  else if(moves > perfect*1.5) stars=2;
+
+  document.getElementById('stars').textContent='⭐'.repeat(stars)+'☆'.repeat(3-stars);
+  const isNew=saveRec(levelIdx, elapsed, moves);
+  const best=getRec(levelIdx);
+  let tb='زمان: <b>'+fmt(elapsed)+'</b> · حرکت: <b>'+moves+'</b><br>';
+  tb+='رکورد: <b>'+fmt(best.t)+'</b> / <b>'+best.m+'</b> حرکت';
+  if(isNew) tb+='<br><span class="new-rec">🏆 رکورد جدید!</span>';
+  document.getElementById('time-box').innerHTML=tb;
+  show('win');
+}
+
+function startTimer(){
+  stopTimer();
+  startTime=performance.now();
+  elapsed=0;
+  document.getElementById('timer').textContent='0';
+  timerId=setInterval(()=>{
+    elapsed=Math.floor((performance.now()-startTime)/1000);
+    document.getElementById('timer').textContent=elapsed;
+  }, 250);
+}
+function stopTimer(){
+  if(timerId){clearInterval(timerId);timerId=null;}
+  if(startTime) elapsed=Math.floor((performance.now()-startTime)/1000);
+}
+
+/* sounds */
+let actx;
+function ensureAud(){if(!actx)actx=new(window.AudioContext||window.webkitAudioContext)();if(actx.state==='suspended')actx.resume()}
+function tone(freq,dur,type,vol){
+  try{ensureAud();const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain();
+  o.connect(g);g.connect(actx.destination);o.type=type||'sine';o.frequency.value=freq;
+  g.gain.setValueAtTime(vol||0.08,t);g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  o.start(t);o.stop(t+dur);}catch(e){}
+}
+function playFlip(){tone(520,0.06,'square',0.05)}
+function playMatch(){tone(660,0.1,'sine',0.1);setTimeout(()=>tone(880,0.12,'sine',0.1),80)}
+function playMiss(){tone(200,0.15,'sawtooth',0.06)}
+function playWin(){[0,0.12,0.24].forEach((d,i)=>setTimeout(()=>tone(523+i*131,0.18,'sine',0.12),d*1000))}
+</script>
+</body>
+</html>
